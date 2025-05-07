@@ -44,11 +44,21 @@ public class TarefaController {
 	}
 
 	@DeleteMapping(value = "/delete/{id}")
-	public ResponseEntity<Void> deleteTarefa(@PathVariable Long id) {
+	public ResponseEntity<String> deleteTarefa(@PathVariable Long id) {
 		Tarefas tarefa = ts.buscarTarefaPorId(id);
 		if (tarefa != null) {
 			ts.deletarTarefa(id);
-			return ResponseEntity.noContent().build();
+			return ResponseEntity.ok("Tarefa deletada com sucesso");
+		} else {
+			return ResponseEntity.ok("Tarefa não foi encontrada");
+		}
+	}
+
+	@PutMapping(value = "/atualizar/{id}")
+	public ResponseEntity<Tarefas> updateTarefa(@PathVariable Long id, @RequestBody Tarefas tarefaAtualizada) {
+		Tarefas tarefa = ts.atualizarTarefa(id, tarefaAtualizada);
+		if (tarefa != null) {
+			return ResponseEntity.ok().body(tarefa);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
